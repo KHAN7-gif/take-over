@@ -46,6 +46,7 @@
 .td-top button{display:grid;place-items:center}
 .td-top button .td-svg{width:25px;height:25px}
 @media(max-width:520px){.td-tabs{gap:5px;padding:9px 9px 13px}.td-tabs button{min-height:53px;padding:7px 3px;flex-direction:column;gap:4px;font-size:10px}.td-tabs button .td-svg{height:20px;width:20px;flex-basis:20px}.td-tab-label{display:block!important}.td-top button .td-svg{width:24px;height:24px}}
+.td-tabs button{padding:10px!important;min-height:54px}.td-tabs button .td-svg{width:24px;height:24px;flex:0 0 24px}@media(max-width:520px){.td-tabs button{min-height:52px;padding:10px 2px!important}.td-tabs button .td-svg{width:23px;height:23px;flex:0 0 23px}}
 </style></head><body><header><div class="bar"><div><div class="brand">TAKE <span>OVER</span></div><div class="sub">ESPORTS TOURNAMENT MANAGEMENT</div></div><div class="grow"></div><button class="hdrbtn" id="role">Demo: Admin ▾</button></div></header><div class="layout"><aside class="side" id="sidebar"></aside><main class="pane" id="app"></main></div><nav class="bottom" id="bottom"></nav>
 <script>
 const games=[['PUBG Mobile','🪖'],['Mobile Legends: Bang Bang','⚔️'],['eFootball Mobile','⚽'],['eFootball Console','🎮'],['FC 27','🏟️'],['Gran Turismo 7','🏎️'],['Tekken 8','🥊']];
@@ -115,7 +116,7 @@ const tabs=[['home','Home'],['matches','Matches'],['teams','Teams'],['bracket','
 const followed=Boolean(state.followed&&state.followed[t.id]);
 return '<div class="tournament-page" style="--banner-a:'+theme[0]+';--banner-b:'+theme[1]+'">'+
 '<div class="td-header"><div class="td-top"><button aria-label="Back" onclick="go(\'tournaments\')">'+tournamentSvg('back')+'</button><span>'+esc(t.name)+'</span><button aria-label="Share tournament" onclick="shareTournament()">'+tournamentSvg('share')+'</button><button aria-label="More information" onclick="openDetailTab(\'home\')">'+tournamentSvg('more')+'</button></div>'+
-'<div class="td-tabs" role="tablist" aria-label="Tournament navigation">'+tabs.map(x=>'<button type="button" role="tab" aria-selected="'+(detailTab===x[0]?'true':'false')+'" class="'+(detailTab===x[0]?'active':'')+'" onclick="openDetailTab(\''+x[0]+'\')">'+tournamentSvg(x[0])+'<span class="td-tab-label">'+x[1]+'</span></button>').join('')+'</div></div>'+
+'<div class="td-tabs" role="tablist" aria-label="Tournament navigation">'+tabs.map(x=>'<button type="button" role="tab" aria-selected="'+(detailTab===x[0]?'true':'false')+'" class="'+(detailTab===x[0]?'active':'')+'" onclick="openDetailTab(\''+x[0]+'\')">'+tournamentSvg(x[0])+'</button>').join('')+'</div></div>'+
 '<div class="td-banner"><div class="td-banner-mark">'+theme[2]+'</div><div class="td-banner-stripes"></div><div class="td-banner-category">'+theme[3]+'</div><div class="td-banner-name">'+esc(t.game)+'</div></div>'+
 '<div class="td-card"><div class="td-avatar">'+gameIcon(t.game)+'</div><button class="td-follow '+(followed?'following':'')+'" onclick="toggleFollow()">'+(followed?'✓ Following':'+ Follow')+'</button>'+
 detailPanel(t)+'</div></div>';
