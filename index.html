@@ -37,6 +37,15 @@
 .td-messagebox span:last-child{color:#173264}.td-content{padding:15px 30px 40px}.td-content h2{font-size:23px}
 @media(max-width:800px){.in-tournament .layout{padding:0}.td-top{height:108px;padding:24px 15px 8px}.td-top>span{font-size:22px}.td-tabs{padding:12px 11px 14px;gap:7px}.td-tabs button{min-width:63px;padding:10px 8px}.td-banner{height:205px}.td-banner-mark{font-size:190px;top:-25px}.td-banner-name{font-size:26px}.td-card{padding-top:85px}.td-follow{right:18px;top:27px;font-size:17px;padding:13px 18px}.td-avatar{left:19px;width:95px;height:95px;font-size:45px}.td-summary{padding:9px 20px 21px}.td-summary h1{font-size:34px}.td-info{padding:6px 20px}.td-stat{min-height:83px;gap:15px}.td-stat strong{font-size:16px}.td-stat small{font-size:12px}.td-messages{padding:26px 20px}.td-content{padding:15px 17px 40px}}
 @media(max-width:420px){.td-tab-label{display:none}.td-tabs button{min-width:58px}.td-top{gap:12px}.td-top>span{font-size:20px}}
+
+/* SVG icon tab improvements */
+.td-svg{width:21px;height:21px;flex:0 0 21px;display:block;stroke:currentColor}
+.td-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:10px 12px 15px;overflow:visible}
+.td-tabs button{min-width:0;min-height:54px;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 5px;white-space:nowrap;font-size:clamp(10px,1.9vw,14px);font-weight:750;line-height:1.1;overflow:hidden}
+.td-tabs button .td-svg{width:18px;height:18px;flex-basis:18px}
+.td-top button{display:grid;place-items:center}
+.td-top button .td-svg{width:25px;height:25px}
+@media(max-width:520px){.td-tabs{gap:5px;padding:9px 9px 13px}.td-tabs button{min-height:53px;padding:7px 3px;flex-direction:column;gap:4px;font-size:10px}.td-tabs button .td-svg{height:20px;width:20px;flex-basis:20px}.td-tab-label{display:block!important}.td-top button .td-svg{width:24px;height:24px}}
 </style></head><body><header><div class="bar"><div><div class="brand">TAKE <span>OVER</span></div><div class="sub">ESPORTS TOURNAMENT MANAGEMENT</div></div><div class="grow"></div><button class="hdrbtn" id="role">Demo: Admin ▾</button></div></header><div class="layout"><aside class="side" id="sidebar"></aside><main class="pane" id="app"></main></div><nav class="bottom" id="bottom"></nav>
 <script>
 const games=[['PUBG Mobile','🪖'],['Mobile Legends: Bang Bang','⚔️'],['eFootball Mobile','⚽'],['eFootball Console','🎮'],['FC 27','🏟️'],['Gran Turismo 7','🏎️'],['Tekken 8','🥊']];
@@ -89,14 +98,24 @@ if(detailTab==='bracket')return '<div class="td-content"><h2>Tournament Stages</
 if(detailTab==='media')return '<div class="td-content"><h2>Media & Videos</h2><div class="card empty muted">No videos or media available yet.</div></div>';
 return '<div class="td-summary"><div class="td-visibility"><span class="td-dot green"></span> Private <span class="td-separator">·</span> '+(state.followed&&state.followed[t.id]?1:0)+' follower'+(state.followed&&state.followed[t.id]?'':'s')+'</div><h1>'+esc(t.name)+'</h1><div class="td-category">'+gameIcon(t.game)+' '+esc(t.game)+'</div></div>'+detailInfo(t)+'<div class="td-messages"><h2>MESSAGES</h2><div class="td-messagebox"><span>◈</span><span>Messages coming soon...</span><span>➤</span></div></div>';
 }
+function tournamentSvg(name){const paths={
+home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+matches:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 5v14M3 12h4m10 0h4"/>',
+teams:'<path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/>',
+bracket:'<path d="M4 4h6v5H4zM4 15h6v5H4zM16 9h5v6h-5zM10 6.5h3v5.5h3M10 17.5h3V12"/>',
+media:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/>',
+share:'<circle cx="18" cy="5" r="2"/><circle cx="6" cy="12" r="2"/><circle cx="18" cy="19" r="2"/><path d="m8 11 8-5m-8 7 8 5"/>',
+back:'<path d="m15 18-6-6 6-6"/>',
+more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>'
+};return '<svg class="td-svg" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[name]||paths.home)+'</svg>'}
 function detail(){
 const t=state.tournaments.find(x=>x.id===selected);if(!t)return tour();
 const theme=gameThemes[t.game]||['#1a3262','#5372b6','🏆','ESPORTS'];
-const tabs=[['home','⌂','Home'],['matches','▣','Matches'],['teams','☷','Teams'],['bracket','♧','Bracket'],['media','▻','Media']];
+const tabs=[['home','Home'],['matches','Matches'],['teams','Teams'],['bracket','Bracket'],['media','Media']];
 const followed=Boolean(state.followed&&state.followed[t.id]);
 return '<div class="tournament-page" style="--banner-a:'+theme[0]+';--banner-b:'+theme[1]+'">'+
-'<div class="td-header"><div class="td-top"><button aria-label="Back" onclick="go(\'tournaments\')">‹</button><span>'+esc(t.name)+'</span><button aria-label="Share tournament" onclick="shareTournament()">♧</button><button aria-label="More information" onclick="openDetailTab(\'home\')">•••</button></div>'+
-'<div class="td-tabs">'+tabs.map(x=>'<button class="'+(detailTab===x[0]?'active':'')+'" onclick="openDetailTab(\''+x[0]+'\')"><span>'+x[1]+'</span><span class="td-tab-label">'+x[2]+'</span></button>').join('')+'</div></div>'+
+'<div class="td-header"><div class="td-top"><button aria-label="Back" onclick="go(\'tournaments\')">'+tournamentSvg('back')+'</button><span>'+esc(t.name)+'</span><button aria-label="Share tournament" onclick="shareTournament()">'+tournamentSvg('share')+'</button><button aria-label="More information" onclick="openDetailTab(\'home\')">'+tournamentSvg('more')+'</button></div>'+
+'<div class="td-tabs" role="tablist" aria-label="Tournament navigation">'+tabs.map(x=>'<button type="button" role="tab" aria-selected="'+(detailTab===x[0]?'true':'false')+'" class="'+(detailTab===x[0]?'active':'')+'" onclick="openDetailTab(\''+x[0]+'\')">'+tournamentSvg(x[0])+'<span class="td-tab-label">'+x[1]+'</span></button>').join('')+'</div></div>'+
 '<div class="td-banner"><div class="td-banner-mark">'+theme[2]+'</div><div class="td-banner-stripes"></div><div class="td-banner-category">'+theme[3]+'</div><div class="td-banner-name">'+esc(t.game)+'</div></div>'+
 '<div class="td-card"><div class="td-avatar">'+gameIcon(t.game)+'</div><button class="td-follow '+(followed?'following':'')+'" onclick="toggleFollow()">'+(followed?'✓ Following':'+ Follow')+'</button>'+
 detailPanel(t)+'</div></div>';
